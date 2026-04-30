@@ -256,16 +256,65 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
     .comment-meta {
       display: flex;
       align-items: baseline;
       gap: 0.6rem;
-      margin-bottom: 0.5rem;
     }
     .comment-name { font-size: 0.875rem; font-weight: 600; }
     .comment-date { font-size: 0.75rem; color: var(--muted); }
+    .comment-owner-actions { display: flex; gap: 0.4rem; margin-left: auto; }
     .comment-body { font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+
+    /* edit / delete controls */
+    .btn-ghost {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.75rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      line-height: 1.5;
+    }
+    .btn-ghost:hover       { border-color: var(--accent); color: var(--text); }
+    .btn-ghost.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+    .comment-edit-area {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      resize: vertical;
+      min-height: 72px;
+      outline: none;
+    }
+    .comment-edit-area:focus { border-color: var(--accent); }
+    .comment-edit-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    .delete-confirm-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
 
     .comments-empty {
       text-align: center;
@@ -484,35 +533,159 @@
     window.addEventListener('DOMContentLoaded', scaleAll);
     window.addEventListener('resize', scaleAll);
 
-    /* ── comments ── */
+    /* ── helpers ── */
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
     function formatDate(iso) {
       return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     }
+    function getToken(id)        { return localStorage.getItem(`ct_${id}`); }
+    function saveToken(id, tok)  { localStorage.setItem(`ct_${id}`, tok); }
+    function dropToken(id)       { localStorage.removeItem(`ct_${id}`); }
 
+    /* ── in-memory comments cache (keeps body text for edit) ── */
+    let cachedComments = [];
+
+    /* ── render ── */
     function renderComments(comments) {
+      cachedComments = comments;
       const list = document.getElementById('comment-list');
       if (!comments.length) {
         list.innerHTML = '<p class="comments-empty">No comments yet — be the first.</p>';
         return;
       }
-      list.innerHTML = comments.map(c => `
-        <div class="comment">
+      list.innerHTML = comments.map(c => {
+        const mine = !!getToken(c.id);
+        return `
+        <div class="comment" id="comment-${c.id}">
           <div class="comment-meta">
             <span class="comment-name">${escHtml(c.name)}</span>
             <span class="comment-date">${formatDate(c.created_at)}</span>
+            ${mine ? `
+            <span class="comment-owner-actions">
+              <button class="btn-ghost" data-action="edit"   data-id="${c.id}">Edit</button>
+              <button class="btn-ghost danger" data-action="delete" data-id="${c.id}">Delete</button>
+            </span>` : ''}
           </div>
           <div class="comment-body">${escHtml(c.body)}</div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
     }
 
-    function escHtml(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    /* ── event delegation for edit / delete ── */
+    document.getElementById('comment-list').addEventListener('click', async e => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const id     = parseInt(btn.dataset.id, 10);
+      const action = btn.dataset.action;
+      const el     = document.getElementById(`comment-${id}`);
+
+      if (action === 'edit')           startEdit(id, el);
+      if (action === 'edit-cancel')    cancelEdit(id, el);
+      if (action === 'edit-save')      await saveEdit(id, el);
+      if (action === 'delete')         showDeleteConfirm(id, el);
+      if (action === 'delete-cancel')  cancelDelete(id, el);
+      if (action === 'delete-confirm') await confirmDelete(id, el);
+    });
+
+    function startEdit(id, el) {
+      const comment = cachedComments.find(c => c.id === id);
+      const bodyEl  = el.querySelector('.comment-body');
+      const ta      = document.createElement('textarea');
+      ta.className  = 'comment-edit-area';
+      ta.value      = comment.body;
+      ta.dataset.editArea = id;
+      bodyEl.replaceWith(ta);
+      ta.focus();
+
+      const actionsEl = el.querySelector('.comment-owner-actions');
+      actionsEl.innerHTML = `
+        <button class="btn-ghost" data-action="edit-cancel" data-id="${id}">Cancel</button>
+        <button class="btn-ghost" data-action="edit-save"   data-id="${id}">Save</button>`;
     }
 
+    function cancelEdit(id, el) {
+      const comment = cachedComments.find(c => c.id === id);
+      const ta      = el.querySelector('textarea[data-edit-area]');
+      const bodyEl  = document.createElement('div');
+      bodyEl.className = 'comment-body';
+      bodyEl.textContent = comment.body;
+      ta.replaceWith(bodyEl);
+
+      const actionsEl = el.querySelector('.comment-owner-actions');
+      actionsEl.innerHTML = `
+        <button class="btn-ghost" data-action="edit"   data-id="${id}">Edit</button>
+        <button class="btn-ghost danger" data-action="delete" data-id="${id}">Delete</button>`;
+    }
+
+    async function saveEdit(id, el) {
+      const ta      = el.querySelector('textarea[data-edit-area]');
+      const newBody = ta.value.trim();
+      if (!newBody) return;
+      const saveBtn = el.querySelector('[data-action="edit-save"]');
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+
+      try {
+        const res = await fetch(`${SB_URL}/rest/v1/comments?id=eq.${id}`, {
+          method: 'PATCH',
+          headers: { ...sbHeaders, 'x-comment-token': getToken(id) },
+          body: JSON.stringify({ body: newBody }),
+        });
+        if (!res.ok) throw new Error();
+        // update cache and re-render just this comment's body
+        const c = cachedComments.find(c => c.id === id);
+        c.body = newBody;
+        cancelEdit(id, el); // revert to view mode with updated text
+      } catch {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save';
+        alert('Could not save — please try again.');
+      }
+    }
+
+    function showDeleteConfirm(id, el) {
+      if (el.querySelector('.delete-confirm-row')) return;
+      const row = document.createElement('div');
+      row.className = 'delete-confirm-row';
+      row.innerHTML = `
+        <span>Delete this comment?</span>
+        <button class="btn-ghost danger" data-action="delete-confirm" data-id="${id}">Yes, delete</button>
+        <button class="btn-ghost"        data-action="delete-cancel"  data-id="${id}">No</button>`;
+      el.appendChild(row);
+    }
+
+    function cancelDelete(id, el) {
+      el.querySelector('.delete-confirm-row')?.remove();
+    }
+
+    async function confirmDelete(id, el) {
+      const confirmBtn = el.querySelector('[data-action="delete-confirm"]');
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Deleting…';
+
+      try {
+        const res = await fetch(`${SB_URL}/rest/v1/comments?id=eq.${id}`, {
+          method: 'DELETE',
+          headers: { ...sbHeaders, 'x-comment-token': getToken(id) },
+        });
+        if (!res.ok) throw new Error();
+        dropToken(id);
+        cachedComments = cachedComments.filter(c => c.id !== id);
+        renderComments(cachedComments);
+      } catch {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, delete';
+        alert('Could not delete — please try again.');
+      }
+    }
+
+    /* ── fetch all comments ── */
     async function loadComments() {
       try {
         const res = await fetch(
-          `${SB_URL}/rest/v1/comments?select=name,body,created_at&order=created_at.asc`,
+          `${SB_URL}/rest/v1/comments?select=id,name,body,created_at&order=created_at.asc`,
           { headers: sbHeaders }
         );
         if (!res.ok) throw new Error();
@@ -523,13 +696,17 @@
       }
     }
 
+    /* ── post new comment ── */
     async function postComment(name, body) {
-      const res = await fetch(`${SB_URL}/rest/v1/comments`, {
+      const token = crypto.randomUUID();
+      const res = await fetch(`${SB_URL}/rest/v1/comments?select=id`, {
         method: 'POST',
-        headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
-        body: JSON.stringify({ name: name.trim(), body: body.trim() }),
+        headers: { ...sbHeaders, 'Prefer': 'return=representation' },
+        body: JSON.stringify({ name: name.trim(), body: body.trim(), token }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const [row] = await res.json();
+      saveToken(row.id, token);
     }
 
     /* ── form wiring ── */
