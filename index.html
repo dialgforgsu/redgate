@@ -17,6 +17,8 @@
       --text:    #e6edf3;
       --tag-bg:  #21262d;
       --btn-fg:  #0d1117;
+      --danger:  #f85149;
+      --success: #3fb950;
     }
     html.light {
       --bg:      #f6f8fa;
@@ -27,6 +29,8 @@
       --text:    #1f2328;
       --tag-bg:  #eef1f5;
       --btn-fg:  #ffffff;
+      --danger:  #cf222e;
+      --success: #1a7f37;
     }
 
     body {
@@ -58,7 +62,6 @@
       z-index: 100;
     }
     .theme-toggle:hover { border-color: var(--accent); }
-
     .icon-moon { display: block; }
     .icon-sun  { display: none; }
     html.light .icon-moon { display: none; }
@@ -137,24 +140,11 @@
       gap: 0.75rem;
       flex: 1;
     }
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-    }
-    .card-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.55;
-      flex: 1;
-    }
+    .card-title { font-size: 1.05rem; font-weight: 600; }
+    .card-desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.55; flex: 1; }
 
     /* ── actions ── */
-    .card-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
+    .card-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; }
     .btn-pages {
       display: flex;
       align-items: center;
@@ -171,7 +161,6 @@
     }
     .btn-pages:hover { opacity: 0.85; }
     .btn-pages svg { flex-shrink: 0; }
-
     .link-repo {
       display: flex;
       align-items: center;
@@ -191,28 +180,105 @@
       margin-top: 4rem;
     }
     .feedback-header {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-bottom: 1.25rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
     }
-    .feedback-header h2 {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-    .feedback-header p {
-      font-size: 0.84rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-    .feedback-header p strong {
-      color: var(--text);
-    }
+    .feedback-header h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
+    .feedback-header p  { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .feedback-header p strong { color: var(--text); }
 
-    /* utterances iframe inherits the page width automatically */
-    .utterances { max-width: 100% !important; }
+    /* ── comment form ── */
+    .comment-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+    .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      flex: 1;
+      min-width: 180px;
+    }
+    .form-field label { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 0.03em; }
+    .form-field input,
+    .form-field textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      resize: vertical;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--accent); }
+    .form-field textarea { min-height: 90px; }
+
+    .form-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .char-count  { font-size: 0.75rem; color: var(--muted); }
+    .char-count.warn { color: var(--danger); }
+
+    .btn-submit {
+      background: var(--accent);
+      color: var(--btn-fg);
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.52rem 1.1rem;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-submit:hover:not(:disabled) { opacity: 0.85; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-status { font-size: 0.82rem; margin-top: 0.25rem; }
+    .form-status.error   { color: var(--danger); }
+    .form-status.success { color: var(--success); }
+
+    /* ── comment list ── */
+    .comment-list { display: flex; flex-direction: column; gap: 0.85rem; }
+
+    .comment {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+    }
+    .comment-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .comment-name { font-size: 0.875rem; font-weight: 600; }
+    .comment-date { font-size: 0.75rem; color: var(--muted); }
+    .comment-body { font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+
+    .comments-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 2rem 0;
+    }
+    .comments-loading {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      padding: 1.5rem 0;
+    }
 
     /* ── footer ── */
     footer {
@@ -231,7 +297,6 @@
       border: 2px solid var(--border);
       transition: border-color 0.2s;
     }
-    footer a:hover .avatar { border-color: var(--accent); }
     footer a {
       color: var(--accent);
       text-decoration: none;
@@ -240,6 +305,7 @@
       align-items: center;
       gap: 0.5rem;
     }
+    footer a:hover .avatar { border-color: var(--accent); }
     footer a:hover { text-decoration: underline; }
   </style>
 </head>
@@ -349,23 +415,33 @@
     <div class="feedback-header">
       <h2>Feedback</h2>
       <p>
-        Got something to say? Leave a comment below — a GitHub account is required.<br>
-        <strong>Please be specific:</strong> mention the tool name, describe the exact behaviour you're seeing or
-        the change you'd like, and include any steps to reproduce a bug. Vague reports are hard to act on.
+        Leave a comment — no account needed, just a name.<br>
+        <strong>Please be specific:</strong> mention which tool you're referring to, describe the exact
+        behaviour you're seeing or the change you'd like, and include steps to reproduce any bugs.
       </p>
     </div>
-    <!--
-      Utterances stores comments as GitHub Issues on dialgforgsu/redgate.
-      One-time setup: install the Utterances app on that repo at https://utteranc.es/
-    -->
-    <script src="https://utteranc.es/client.js"
-            repo="dialgforgsu/redgate"
-            issue-term="pathname"
-            label="feedback"
-            theme="github-dark"
-            crossorigin="anonymous"
-            async>
-    </script>
+
+    <form class="comment-form" id="comment-form" novalidate>
+      <div class="form-row">
+        <div class="form-field" style="max-width: 240px">
+          <label for="cf-name">NAME</label>
+          <input id="cf-name" type="text" placeholder="Your name" maxlength="80" autocomplete="name" required />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="cf-body">COMMENT</label>
+        <textarea id="cf-body" placeholder="Describe the change you'd like to see or the bug you found…" maxlength="2000" required></textarea>
+      </div>
+      <div class="form-footer">
+        <span class="char-count" id="char-count">0 / 2000</span>
+        <button class="btn-submit" type="submit">Submit</button>
+      </div>
+      <p class="form-status" id="form-status" hidden></p>
+    </form>
+
+    <div class="comment-list" id="comment-list">
+      <p class="comments-loading">Loading comments…</p>
+    </div>
   </section>
 
   <footer>
@@ -379,45 +455,129 @@
   </footer>
 
   <script>
-    // ── theme ──
-    function utterancesTheme(dark) {
-      const frame = document.querySelector('.utterances-frame');
-      if (frame) {
-        frame.contentWindow.postMessage(
-          { type: 'set-theme', theme: dark ? 'github-dark' : 'github-light' },
-          'https://utteranc.es'
-        );
-      }
-    }
+    /* ── config ── */
+    const SB_URL = 'https://zezigpysakremuredzwj.supabase.co';
+    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplemlncHlzYWtyZW11cmVkendqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NjkxMzAsImV4cCI6MjA5MzE0NTEzMH0.iH6DMmKH5e28TpnIezvyqn06m7LPyJGmB3bZLHi6Z0s';
 
+    const sbHeaders = {
+      'apikey': SB_KEY,
+      'Authorization': `Bearer ${SB_KEY}`,
+      'Content-Type': 'application/json',
+    };
+
+    /* ── theme ── */
     function toggleTheme() {
       const isLight = document.documentElement.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      utterancesTheme(!isLight);
     }
-
     if (localStorage.getItem('theme') === 'light') {
       document.documentElement.classList.add('light');
     }
 
-    // sync utterances once it loads
-    window.addEventListener('message', e => {
-      if (e.origin === 'https://utteranc.es' && e.data?.type === 'resize') {
-        utterancesTheme(!document.documentElement.classList.contains('light'));
-      }
-    });
-
-    // ── scale iframes to fit their wrapper ──
+    /* ── scale iframe previews ── */
     function scaleAll() {
       document.querySelectorAll('.preview-wrap').forEach(wrap => {
         const iframe = wrap.querySelector('iframe');
-        if (!iframe) return;
-        iframe.style.transform = `scale(${wrap.clientWidth / 1280})`;
+        if (iframe) iframe.style.transform = `scale(${wrap.clientWidth / 1280})`;
       });
     }
-
     window.addEventListener('DOMContentLoaded', scaleAll);
     window.addEventListener('resize', scaleAll);
+
+    /* ── comments ── */
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function renderComments(comments) {
+      const list = document.getElementById('comment-list');
+      if (!comments.length) {
+        list.innerHTML = '<p class="comments-empty">No comments yet — be the first.</p>';
+        return;
+      }
+      list.innerHTML = comments.map(c => `
+        <div class="comment">
+          <div class="comment-meta">
+            <span class="comment-name">${escHtml(c.name)}</span>
+            <span class="comment-date">${formatDate(c.created_at)}</span>
+          </div>
+          <div class="comment-body">${escHtml(c.body)}</div>
+        </div>`).join('');
+    }
+
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    async function loadComments() {
+      try {
+        const res = await fetch(
+          `${SB_URL}/rest/v1/comments?select=name,body,created_at&order=created_at.asc`,
+          { headers: sbHeaders }
+        );
+        if (!res.ok) throw new Error();
+        renderComments(await res.json());
+      } catch {
+        document.getElementById('comment-list').innerHTML =
+          '<p class="comments-empty">Could not load comments.</p>';
+      }
+    }
+
+    async function postComment(name, body) {
+      const res = await fetch(`${SB_URL}/rest/v1/comments`, {
+        method: 'POST',
+        headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ name: name.trim(), body: body.trim() }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    }
+
+    /* ── form wiring ── */
+    const form      = document.getElementById('comment-form');
+    const nameInput = document.getElementById('cf-name');
+    const bodyInput = document.getElementById('cf-body');
+    const charCount = document.getElementById('char-count');
+    const status    = document.getElementById('form-status');
+    const submitBtn = form.querySelector('.btn-submit');
+
+    bodyInput.addEventListener('input', () => {
+      const n = bodyInput.value.length;
+      charCount.textContent = `${n} / 2000`;
+      charCount.classList.toggle('warn', n > 1800);
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      const body = bodyInput.value.trim();
+      if (!name || !body) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+      status.hidden = true;
+
+      try {
+        await postComment(name, body);
+        nameInput.value = '';
+        bodyInput.value = '';
+        charCount.textContent = '0 / 2000';
+        showStatus('Comment posted — thanks!', 'success');
+        await loadComments();
+      } catch {
+        showStatus('Something went wrong. Please try again.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    });
+
+    function showStatus(msg, type) {
+      status.textContent = msg;
+      status.className = `form-status ${type}`;
+      status.hidden = false;
+    }
+
+    loadComments();
   </script>
 
 </body>
