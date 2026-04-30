@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — dialgforgsu</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --accent:    #58a6ff;
+      --accent2:   #3fb950;
+      --muted:     #8b949e;
+      --text:      #e6edf3;
+      --tag-bg:    #21262d;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── header ── */
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    header h1 span { color: var(--accent); }
+    header p {
+      margin-top: 0.5rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* ── grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* ── card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 1.5rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(88,166,255,0.08);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+
+    /* ── primary CTA (pages link) ── */
+    .btn-pages {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #0d1117;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      width: fit-content;
+    }
+    .btn-pages:hover { opacity: 0.85; }
+    .btn-pages svg { flex-shrink: 0; }
+
+    /* ── repo link (secondary) ── */
+    .link-repo {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+      width: fit-content;
+    }
+    .link-repo:hover { color: var(--text); }
+
+    /* ── divider between CTAs ── */
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    /* ── no-pages card variant ── */
+    .card.no-pages .btn-repo-primary {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.55rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+      width: fit-content;
+    }
+    .card.no-pages .btn-repo-primary:hover {
+      border-color: var(--accent);
+      background: #1c2230;
+    }
+
+    /* ── footer ── */
+    footer {
+      margin-top: 4rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Projects <span>/</span> dialgforgsu</h1>
+    <p>Work tools &amp; utilities built for Redgate workflows</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- ── Redgate Visual History ── -->
+    <div class="card">
+      <div class="card-title">Redgate Visual History</div>
+      <div class="card-desc">
+        Interactive visual timeline of Redgate product release history.
+      </div>
+      <div class="card-actions">
+        <a class="btn-pages"
+           href="https://dialgforgsu.github.io/rg-history/"
+           target="_blank" rel="noopener">
+          <!-- globe icon -->
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
+          </svg>
+          Live Site
+        </a>
+        <a class="link-repo"
+           href="https://github.com/dialgforgsu/rg-history"
+           target="_blank" rel="noopener">
+          <!-- github icon -->
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          github.com/dialgforgsu/rg-history
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Redgate Release Checker ── -->
+    <div class="card no-pages">
+      <div class="card-title">Redgate Release Checker</div>
+      <div class="card-desc">
+        Checks and compares Redgate product release versions across environments.
+      </div>
+      <div class="card-actions">
+        <a class="btn-repo-primary"
+           href="https://github.com/dialgforgsu/re-check"
+           target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- ── Monitor Alert Converter ── -->
+    <div class="card no-pages">
+      <div class="card-title">Monitor Alert Converter</div>
+      <div class="card-desc">
+        Converts and transforms monitoring alert configurations between formats.
+      </div>
+      <div class="card-actions">
+        <a class="btn-repo-primary"
+           href="https://github.com/dialgforgsu/alertconverter"
+           target="_blank" rel="noopener">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">github.com/dialgforgsu</a>
+  </footer>
+
+</body>
+</html>
