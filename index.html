@@ -50,13 +50,10 @@
       border: 1px solid var(--border);
       color: var(--text);
       border-radius: 8px;
-      padding: 0.38rem 0.7rem;
+      padding: 0.42rem 0.52rem;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.38rem;
-      font-size: 0.78rem;
-      font-weight: 500;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
       z-index: 100;
     }
@@ -187,31 +184,79 @@
     }
     .link-repo:hover { color: var(--text); }
 
+    /* ── feedback section ── */
+    .feedback-section {
+      width: 100%;
+      max-width: 960px;
+      margin-top: 4rem;
+    }
+    .feedback-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .feedback-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .feedback-header p {
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .feedback-header p strong {
+      color: var(--text);
+    }
+
+    /* utterances iframe inherits the page width automatically */
+    .utterances { max-width: 100% !important; }
+
     /* ── footer ── */
     footer {
       margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.65rem;
       font-size: 0.78rem;
       color: var(--muted);
     }
-    footer a { color: var(--accent); text-decoration: none; }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    footer a:hover .avatar { border-color: var(--accent); }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
     footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle colour theme">
-    <svg class="icon-moon" width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+    <svg class="icon-moon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
       <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
     </svg>
-    <svg class="icon-sun" width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+    <svg class="icon-sun" width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
       <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
     </svg>
-    <span class="toggle-label">Light</span>
   </button>
 
   <header>
     <h1>Redgate Tools</h1>
-    <p class="subtitle">Built By dialgforgsu</p>
+    <p class="subtitle">Built by G-Su Paek</p>
   </header>
 
   <div class="grid">
@@ -299,24 +344,68 @@
 
   </div>
 
+  <!-- ── feedback / comments ── -->
+  <section class="feedback-section">
+    <div class="feedback-header">
+      <h2>Feedback</h2>
+      <p>
+        Got something to say? Leave a comment below — a GitHub account is required.<br>
+        <strong>Please be specific:</strong> mention the tool name, describe the exact behaviour you're seeing or
+        the change you'd like, and include any steps to reproduce a bug. Vague reports are hard to act on.
+      </p>
+    </div>
+    <!--
+      Utterances stores comments as GitHub Issues on dialgforgsu/redgate.
+      One-time setup: install the Utterances app on that repo at https://utteranc.es/
+    -->
+    <script src="https://utteranc.es/client.js"
+            repo="dialgforgsu/redgate"
+            issue-term="pathname"
+            label="feedback"
+            theme="github-dark"
+            crossorigin="anonymous"
+            async>
+    </script>
+  </section>
+
   <footer>
-    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">github.com/dialgforgsu</a>
+    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">
+      <img class="avatar"
+           src="https://github.com/dialgforgsu.png"
+           alt="dialgforgsu GitHub avatar"
+           width="40" height="40" />
+      github.com/dialgforgsu
+    </a>
   </footer>
 
   <script>
     // ── theme ──
-    const label = document.querySelector('.toggle-label');
+    function utterancesTheme(dark) {
+      const frame = document.querySelector('.utterances-frame');
+      if (frame) {
+        frame.contentWindow.postMessage(
+          { type: 'set-theme', theme: dark ? 'github-dark' : 'github-light' },
+          'https://utteranc.es'
+        );
+      }
+    }
 
     function toggleTheme() {
       const isLight = document.documentElement.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      label.textContent = isLight ? 'Dark' : 'Light';
+      utterancesTheme(!isLight);
     }
 
     if (localStorage.getItem('theme') === 'light') {
       document.documentElement.classList.add('light');
-      label.textContent = 'Dark';
     }
+
+    // sync utterances once it loads
+    window.addEventListener('message', e => {
+      if (e.origin === 'https://utteranc.es' && e.data?.type === 'resize') {
+        utterancesTheme(!document.documentElement.classList.contains('light'));
+      }
+    });
 
     // ── scale iframes to fit their wrapper ──
     function scaleAll() {
