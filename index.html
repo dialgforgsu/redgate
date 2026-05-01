@@ -120,10 +120,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
-      width: 100%;
-      max-width: 980px;
-      height: 100%;
-      max-height: 520px;
+      width: 75vw;
+      height: 75vh;
     }
 
     /* ── card ── */
@@ -206,11 +204,6 @@
       gap: 0.45rem;
     }
 
-    .card-title {
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
     .card-desc {
       font-size: 0.76rem;
       color: var(--muted);
@@ -260,23 +253,37 @@
     }
     .link-repo:hover { color: var(--text); }
 
+    /* ── title row (name + badge side by side) ── */
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: nowrap;
+      min-width: 0;
+    }
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
     /* ── status badges ── */
     .badge {
-      position: absolute;
-      top: 0.65rem;
-      left: 0.65rem;
-      z-index: 3;
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
-      padding: 0.22rem 0.6rem;
+      gap: 0.28rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 20px;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .badge-dot {
       width: 5px;
@@ -353,10 +360,12 @@
           <iframe src="https://dialgforgsu.github.io/rg-history/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
-          <span class="badge badge-yellow"><span class="badge-dot"></span>Almost There</span>
         </div>
         <div class="card-body">
-          <div class="card-title">Redgate Visual History</div>
+          <div class="card-title-row">
+            <div class="card-title">Redgate Visual History</div>
+            <span class="badge badge-yellow"><span class="badge-dot"></span>Almost There</span>
+          </div>
           <div class="card-desc">Visually show the history of Redgate products and why we are where we are today.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
@@ -372,7 +381,7 @@
               dialgforgsu/rg-history
             </a>
           </div>
-          <div class="card-updated">Updated · 1 May 2026</div>
+          <div class="card-updated" data-repo="dialgforgsu/rg-history">—</div>
         </div>
       </div>
 
@@ -382,10 +391,12 @@
           <iframe src="https://dialgforgsu.github.io/re-check/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
-          <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
         </div>
         <div class="card-body">
-          <div class="card-title">Redgate Release Checker</div>
+          <div class="card-title-row">
+            <div class="card-title">Redgate Release Checker</div>
+            <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
+          </div>
           <div class="card-desc">Internal Notes release aggregator applied over our Product Roadmap to show what Redgate is currently focused on.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
@@ -401,7 +412,7 @@
               dialgforgsu/re-check
             </a>
           </div>
-          <div class="card-updated">Updated · 1 May 2026</div>
+          <div class="card-updated" data-repo="dialgforgsu/re-check">—</div>
         </div>
       </div>
 
@@ -411,10 +422,12 @@
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
-          <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
         </div>
         <div class="card-body">
-          <div class="card-title">Monitor Alert Converter</div>
+          <div class="card-title-row">
+            <div class="card-title">Monitor Alert Converter</div>
+            <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
+          </div>
           <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
@@ -430,7 +443,7 @@
               dialgforgsu/alertconverter
             </a>
           </div>
-          <div class="card-updated">Updated · 1 May 2026</div>
+          <div class="card-updated" data-repo="dialgforgsu/alertconverter">—</div>
         </div>
       </div>
 
@@ -462,8 +475,28 @@
         if (iframe) iframe.style.transform = `scale(${wrap.clientWidth / 1280})`;
       });
     }
-    window.addEventListener('DOMContentLoaded', scaleAll);
+    window.addEventListener('DOMContentLoaded', () => { scaleAll(); loadCommitDates(); });
     window.addEventListener('resize', scaleAll);
+
+    function fmtDate(iso) {
+      return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    async function loadCommitDates() {
+      const els = document.querySelectorAll('.card-updated[data-repo]');
+      await Promise.all([...els].map(async el => {
+        const repo = el.dataset.repo;
+        try {
+          const res = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`);
+          if (!res.ok) throw new Error();
+          const [row] = await res.json();
+          const date = row?.commit?.committer?.date ?? row?.commit?.author?.date;
+          el.textContent = `Last commit · ${date ? fmtDate(date) : '—'}`;
+        } catch {
+          el.textContent = 'Last commit · unavailable';
+        }
+      }));
+    }
   </script>
 
 </body>
