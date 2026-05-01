@@ -201,6 +201,12 @@
       background: linear-gradient(to bottom, transparent 62%, var(--surface) 100%);
       pointer-events: none;
     }
+    .preview-link {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      cursor: pointer;
+    }
 
     /* ── card body ── */
     .card-body {
@@ -323,9 +329,8 @@
       gap: 0.3rem;
     }
     .visit-count {
-      font-size: 0.63rem;
+      font-size: 0.72rem;
       color: var(--muted);
-      opacity: 0.55;
       letter-spacing: 0.03em;
     }
     footer a {
@@ -375,6 +380,7 @@
           <iframe src="https://dialgforgsu.github.io/re-check/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <a class="preview-link" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
@@ -406,6 +412,7 @@
           <iframe src="https://dialgforgsu.github.io/rg-history/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <a class="preview-link" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
@@ -437,6 +444,7 @@
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <a class="preview-link" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
