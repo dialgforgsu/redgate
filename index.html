@@ -107,6 +107,12 @@
       font-size: 0.8rem;
       font-style: italic;
     }
+    header .subtitle-2 {
+      color: var(--muted);
+      font-size: 0.68rem;
+      font-style: italic;
+      opacity: 0.75;
+    }
 
     /* ── card grid wrapper — fills the 1fr row ── */
     .card-grid-wrap {
@@ -207,6 +213,8 @@
       font-size: 0.76rem;
       color: var(--muted);
       line-height: 1.5;
+      height: calc(0.76rem * 1.5 * 4);
+      overflow: hidden;
     }
     .card-actions {
       display: flex;
@@ -347,6 +355,7 @@
   <header>
     <h1>Redgate Tools</h1>
     <p class="subtitle">Built by G-Su Paek</p>
+    <p class="subtitle-2">Using Claude Code</p>
   </header>
 
   <div class="card-grid-wrap">
