@@ -179,7 +179,8 @@
 
     /* ── preview ── */
     .preview-wrap {
-      flex: 0 0 58%;
+      flex: 1;
+      min-height: 0;
       overflow: hidden;
       position: relative;
       background: rgba(0,0,0,0.35);
@@ -317,8 +318,15 @@
     /* ── footer ── */
     footer {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 0.3rem;
+    }
+    .visit-count {
+      font-size: 0.63rem;
+      color: var(--muted);
+      opacity: 0.55;
+      letter-spacing: 0.03em;
     }
     footer a {
       display: inline-flex;
@@ -432,7 +440,7 @@
         </div>
         <div class="card-body">
           <div class="card-title-row">
-            <div class="card-title">Monitor Alert Converter</div>
+            <div class="card-title">Redgate Monitor Alert Converter</div>
             <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
           </div>
           <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.</div>
@@ -465,6 +473,7 @@
            width="26" height="26" />
       github.com/dialgforgsu
     </a>
+    <span class="visit-count" id="visit-count"></span>
   </footer>
 
   <script>
@@ -482,7 +491,7 @@
         if (iframe) iframe.style.transform = `scale(${wrap.clientWidth / 1280})`;
       });
     }
-    window.addEventListener('DOMContentLoaded', () => { scaleAll(); loadCommitDates(); });
+    window.addEventListener('DOMContentLoaded', () => { scaleAll(); loadCommitDates(); loadVisitCount(); });
     window.addEventListener('resize', scaleAll);
 
     function fmtDate(iso) {
@@ -503,6 +512,18 @@
           el.textContent = 'Last commit · unavailable';
         }
       }));
+    }
+
+    async function loadVisitCount() {
+      const el = document.getElementById('visit-count');
+      try {
+        const res = await fetch('https://api.countapi.xyz/hit/dialgforgsu/redgate-tools-dashboard');
+        if (!res.ok) throw new Error();
+        const { value } = await res.json();
+        el.textContent = `${value.toLocaleString()} visitor${value === 1 ? '' : 's'}`;
+      } catch {
+        /* silently omit if unavailable */
+      }
     }
   </script>
 
