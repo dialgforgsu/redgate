@@ -260,6 +260,47 @@
     }
     .link-repo:hover { color: var(--text); }
 
+    /* ── status badges ── */
+    .badge {
+      position: absolute;
+      top: 0.65rem;
+      left: 0.65rem;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.22rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .badge-green  { background: rgba(46,160,67,0.18);  color: #3fb950; border: 1px solid rgba(63,185,80,0.35); }
+    .badge-yellow { background: rgba(187,128,9,0.18);  color: #d29922; border: 1px solid rgba(210,153,34,0.35); }
+    .badge-red    { background: rgba(248,81,73,0.18);  color: #f85149; border: 1px solid rgba(248,81,73,0.35); }
+    html.light .badge-green  { background: rgba(46,160,67,0.12);  color: #1a7f37; border-color: rgba(46,160,67,0.3); }
+    html.light .badge-yellow { background: rgba(154,103,0,0.1);   color: #7d4e00; border-color: rgba(154,103,0,0.25); }
+    html.light .badge-red    { background: rgba(207,34,46,0.1);   color: #cf222e; border-color: rgba(207,34,46,0.25); }
+
+    /* ── last updated ── */
+    .card-updated {
+      font-size: 0.67rem;
+      color: var(--muted);
+      padding-top: 0.45rem;
+      border-top: 1px solid var(--border);
+      letter-spacing: 0.01em;
+    }
+
     /* ── footer ── */
     footer {
       display: flex;
@@ -312,10 +353,11 @@
           <iframe src="https://dialgforgsu.github.io/rg-history/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <span class="badge badge-yellow"><span class="badge-dot"></span>Almost There</span>
         </div>
         <div class="card-body">
           <div class="card-title">Redgate Visual History</div>
-          <div class="card-desc">Interactive visual timeline of Redgate product release history.</div>
+          <div class="card-desc">Visually show the history of Redgate products and why we are where we are today.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
@@ -330,6 +372,7 @@
               dialgforgsu/rg-history
             </a>
           </div>
+          <div class="card-updated">Updated · 1 May 2026</div>
         </div>
       </div>
 
@@ -339,10 +382,11 @@
           <iframe src="https://dialgforgsu.github.io/re-check/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
         </div>
         <div class="card-body">
           <div class="card-title">Redgate Release Checker</div>
-          <div class="card-desc">Checks and compares Redgate product release versions across environments.</div>
+          <div class="card-desc">Internal Notes release aggregator applied over our Product Roadmap to show what Redgate is currently focused on.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
@@ -357,6 +401,7 @@
               dialgforgsu/re-check
             </a>
           </div>
+          <div class="card-updated">Updated · 1 May 2026</div>
         </div>
       </div>
 
@@ -366,10 +411,11 @@
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
           <div class="preview-fade"></div>
+          <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
         </div>
         <div class="card-body">
           <div class="card-title">Monitor Alert Converter</div>
-          <div class="card-desc">Converts and transforms monitoring alert configurations between formats.</div>
+          <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
@@ -384,6 +430,7 @@
               dialgforgsu/alertconverter
             </a>
           </div>
+          <div class="card-updated">Updated · 1 May 2026</div>
         </div>
       </div>
 
