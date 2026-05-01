@@ -7,49 +7,69 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── colour tokens ── */
+    /* ── tokens ── */
     :root {
-      --bg:      #0d1117;
-      --surface: #161b22;
-      --border:  #30363d;
-      --accent:  #f85149;
-      --muted:   #8b949e;
-      --text:    #e6edf3;
-      --tag-bg:  #21262d;
-      --btn-fg:  #0d1117;
-      --danger:  #f85149;
-      --success: #3fb950;
+      --bg:       #07090e;
+      --surface:  rgba(14, 18, 28, 0.75);
+      --border:   rgba(255, 255, 255, 0.07);
+      --accent:   #f85149;
+      --muted:    #6e7681;
+      --text:     #e6edf3;
+      --btn-fg:   #fff;
+      --glow:     rgba(248, 81, 73, 0.18);
     }
     html.light {
-      --bg:      #f6f8fa;
-      --surface: #ffffff;
-      --border:  #d0d7de;
-      --accent:  #cf222e;
-      --muted:   #57606a;
-      --text:    #1f2328;
-      --tag-bg:  #eef1f5;
-      --btn-fg:  #ffffff;
-      --danger:  #cf222e;
-      --success: #1a7f37;
+      --bg:       #f0f2f5;
+      --surface:  rgba(255, 255, 255, 0.8);
+      --border:   rgba(0, 0, 0, 0.08);
+      --accent:   #cf222e;
+      --muted:    #6e7681;
+      --text:     #1f2328;
+      --btn-fg:   #fff;
+      --glow:     rgba(207, 34, 46, 0.12);
     }
 
+    /* ── page shell — CSS grid, full viewport ── */
+    html, body { height: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 3rem 1.5rem 5rem;
-      transition: background 0.25s, color 0.25s;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 100dvh;
+      overflow: hidden;
+      padding: 1.6rem 2rem 1.2rem;
+      gap: 1.2rem;
+      transition: background-color 0.3s, color 0.3s;
     }
+
+    /* dark background: dot grid + red radial glow */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(248,81,73,0.09) 0%, transparent 70%),
+        radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 0);
+      background-size: 100%, 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    html.light body::before {
+      background:
+        radial-gradient(ellipse 80% 40% at 50% -5%, rgba(207,34,46,0.06) 0%, transparent 65%);
+      background-size: 100%;
+    }
+
+    /* everything sits above the bg layer */
+    header, .card-grid-wrap, footer { position: relative; z-index: 1; }
 
     /* ── theme toggle ── */
     .theme-toggle {
       position: fixed;
       top: 1.1rem;
-      right: 1.4rem;
+      right: 1.5rem;
       background: var(--surface);
       border: 1px solid var(--border);
       color: var(--text);
@@ -58,7 +78,8 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      backdrop-filter: blur(12px);
+      transition: border-color 0.2s;
       z-index: 100;
     }
     .theme-toggle:hover { border-color: var(--accent); }
@@ -70,53 +91,97 @@
     /* ── header ── */
     header {
       text-align: center;
-      margin-bottom: 3rem;
     }
     header h1 {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
       letter-spacing: -0.5px;
+      background: linear-gradient(100deg, var(--text) 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     header .subtitle {
-      margin-top: 0.35rem;
+      margin-top: 0.25rem;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-style: italic;
     }
 
-    /* ── grid ── */
+    /* ── card grid wrapper — fills the 1fr row ── */
+    .card-grid-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
       width: 100%;
-      max-width: 960px;
+      max-width: 980px;
+      height: 100%;
+      max-height: 520px;
     }
 
     /* ── card ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .card {
+      position: relative;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      height: 100%;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+      animation: fadeUp 0.45s ease both;
     }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.13s; }
+    .card:nth-child(3) { animation-delay: 0.21s; }
+
+    /* top shimmer line — reveals on hover */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent 10%, var(--accent) 50%, transparent 90%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 2;
+    }
+
     .card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px var(--accent), 0 8px 32px rgba(248,81,73,0.1);
+      border-color: rgba(248, 81, 73, 0.4);
+      box-shadow:
+        0 0 0 1px rgba(248,81,73,0.2),
+        0 4px 24px var(--glow),
+        0 16px 48px rgba(0,0,0,0.3);
+      transform: translateY(-3px);
     }
+    .card:hover::before { opacity: 1; }
 
     /* ── preview ── */
     .preview-wrap {
-      width: 100%;
-      height: 180px;
+      flex: 1;
+      min-height: 0;
       overflow: hidden;
       position: relative;
-      background: var(--tag-bg);
-      flex-shrink: 0;
+      background: rgba(0,0,0,0.35);
     }
+    html.light .preview-wrap { background: rgba(0,0,0,0.06); }
+
     .preview-wrap iframe {
       width: 1280px;
       height: 960px;
@@ -128,234 +193,98 @@
     .preview-fade {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 55%, var(--surface));
+      background: linear-gradient(to bottom, transparent 45%, var(--surface) 92%);
       pointer-events: none;
     }
 
     /* ── card body ── */
     .card-body {
-      padding: 1.25rem 1.5rem;
+      flex-shrink: 0;
+      padding: 0.9rem 1.1rem 1rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
-      flex: 1;
+      gap: 0.45rem;
     }
-    .card-title { font-size: 1.05rem; font-weight: 600; }
-    .card-desc  { font-size: 0.85rem; color: var(--muted); line-height: 1.55; flex: 1; }
 
-    /* ── actions ── */
-    .card-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.25rem; }
-    .btn-pages {
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .card-desc {
+      font-size: 0.76rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .card-actions {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
+      margin-top: 0.25rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── live site button ── */
+    .btn-pages {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
       background: var(--accent);
       color: var(--btn-fg);
       font-weight: 600;
-      font-size: 0.875rem;
-      padding: 0.55rem 1rem;
-      border-radius: 8px;
+      font-size: 0.78rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
       text-decoration: none;
-      transition: opacity 0.15s;
-      width: fit-content;
+      transition: opacity 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
     }
-    .btn-pages:hover { opacity: 0.85; }
+    .btn-pages:hover {
+      opacity: 0.88;
+      box-shadow: 0 0 12px var(--glow);
+    }
     .btn-pages svg { flex-shrink: 0; }
+
+    /* ── repo link ── */
     .link-repo {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
+      gap: 0.35rem;
+      font-size: 0.72rem;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.15s;
-      width: fit-content;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .link-repo:hover { color: var(--text); }
 
-    /* ── feedback section ── */
-    .feedback-section {
-      width: 100%;
-      max-width: 960px;
-      margin-top: 4rem;
-    }
-    .feedback-header {
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 1.5rem;
-    }
-    .feedback-header h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem; }
-    .feedback-header p  { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
-    .feedback-header p strong { color: var(--text); }
-
-    /* ── comment form ── */
-    .comment-form {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-    .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      flex: 1;
-      min-width: 180px;
-    }
-    .form-field label { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 0.03em; }
-    .form-field input,
-    .form-field textarea {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.875rem;
-      padding: 0.5rem 0.75rem;
-      resize: vertical;
-      transition: border-color 0.15s;
-      outline: none;
-    }
-    .form-field input:focus,
-    .form-field textarea:focus { border-color: var(--accent); }
-    .form-field textarea { min-height: 90px; }
-
-    .form-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .char-count  { font-size: 0.75rem; color: var(--muted); }
-    .char-count.warn { color: var(--danger); }
-
-    .btn-submit {
-      background: var(--accent);
-      color: var(--btn-fg);
-      border: none;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 600;
-      padding: 0.52rem 1.1rem;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    .btn-submit:hover:not(:disabled) { opacity: 0.85; }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .form-status { font-size: 0.82rem; margin-top: 0.25rem; }
-    .form-status.error   { color: var(--danger); }
-    .form-status.success { color: var(--success); }
-
-    /* ── comment list ── */
-    .comment-list { display: flex; flex-direction: column; gap: 0.85rem; }
-
-    .comment {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .comment-meta {
-      display: flex;
-      align-items: baseline;
-      gap: 0.6rem;
-    }
-    .comment-name { font-size: 0.875rem; font-weight: 600; }
-    .comment-date { font-size: 0.75rem; color: var(--muted); }
-    .comment-owner-actions { display: flex; gap: 0.4rem; margin-left: auto; }
-    .comment-body { font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-
-    /* edit / delete controls */
-    .btn-ghost {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      border-radius: 6px;
-      padding: 0.18rem 0.55rem;
-      font-size: 0.75rem;
-      font-family: inherit;
-      cursor: pointer;
-      transition: border-color 0.15s, color 0.15s;
-      line-height: 1.5;
-    }
-    .btn-ghost:hover       { border-color: var(--accent); color: var(--text); }
-    .btn-ghost.danger:hover { border-color: var(--danger); color: var(--danger); }
-
-    .comment-edit-area {
-      width: 100%;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.875rem;
-      padding: 0.5rem 0.75rem;
-      resize: vertical;
-      min-height: 72px;
-      outline: none;
-    }
-    .comment-edit-area:focus { border-color: var(--accent); }
-    .comment-edit-footer {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-    }
-
-    .delete-confirm-row {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .comments-empty {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-      padding: 2rem 0;
-    }
-    .comments-loading {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-      padding: 1.5rem 0;
-    }
-
     /* ── footer ── */
     footer {
-      margin-top: 4rem;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 0.65rem;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid var(--border);
-      transition: border-color 0.2s;
+      justify-content: center;
     }
     footer a {
-      color: var(--accent);
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.55rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--text); }
+    .avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s;
+      display: block;
     }
     footer a:hover .avatar { border-color: var(--accent); }
-    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -374,147 +303,104 @@
     <p class="subtitle">Built by G-Su Paek</p>
   </header>
 
-  <div class="grid">
+  <div class="card-grid-wrap">
+    <div class="grid">
 
-    <!-- ── Redgate Visual History ── -->
-    <div class="card">
-      <div class="preview-wrap">
-        <iframe src="https://dialgforgsu.github.io/rg-history/"
-                tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
-        <div class="preview-fade"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Redgate Visual History</div>
-        <div class="card-desc">Interactive visual timeline of Redgate product release history.</div>
-        <div class="card-actions">
-          <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-            </svg>
-            Live Site
-          </a>
-          <a class="link-repo" href="https://github.com/dialgforgsu/rg-history" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            github.com/dialgforgsu/rg-history
-          </a>
+      <!-- Redgate Visual History -->
+      <div class="card">
+        <div class="preview-wrap">
+          <iframe src="https://dialgforgsu.github.io/rg-history/"
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+          <div class="preview-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Redgate Visual History</div>
+          <div class="card-desc">Interactive visual timeline of Redgate product release history.</div>
+          <div class="card-actions">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
+              </svg>
+              Live Site
+            </a>
+            <a class="link-repo" href="https://github.com/dialgforgsu/rg-history" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              dialgforgsu/rg-history
+            </a>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ── Redgate Release Checker ── -->
-    <div class="card">
-      <div class="preview-wrap">
-        <iframe src="https://dialgforgsu.github.io/re-check/"
-                tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
-        <div class="preview-fade"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Redgate Release Checker</div>
-        <div class="card-desc">Checks and compares Redgate product release versions across environments.</div>
-        <div class="card-actions">
-          <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-            </svg>
-            Live Site
-          </a>
-          <a class="link-repo" href="https://github.com/dialgforgsu/re-check" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            github.com/dialgforgsu/re-check
-          </a>
+      <!-- Redgate Release Checker -->
+      <div class="card">
+        <div class="preview-wrap">
+          <iframe src="https://dialgforgsu.github.io/re-check/"
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+          <div class="preview-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Redgate Release Checker</div>
+          <div class="card-desc">Checks and compares Redgate product release versions across environments.</div>
+          <div class="card-actions">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
+              </svg>
+              Live Site
+            </a>
+            <a class="link-repo" href="https://github.com/dialgforgsu/re-check" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              dialgforgsu/re-check
+            </a>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ── Monitor Alert Converter ── -->
-    <div class="card">
-      <div class="preview-wrap">
-        <iframe src="https://dialgforgsu.github.io/alertconverter/"
-                tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
-        <div class="preview-fade"></div>
-      </div>
-      <div class="card-body">
-        <div class="card-title">Monitor Alert Converter</div>
-        <div class="card-desc">Converts and transforms monitoring alert configurations between formats.</div>
-        <div class="card-actions">
-          <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-            </svg>
-            Live Site
-          </a>
-          <a class="link-repo" href="https://github.com/dialgforgsu/alertconverter" target="_blank" rel="noopener">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-            github.com/dialgforgsu/alertconverter
-          </a>
+      <!-- Monitor Alert Converter -->
+      <div class="card">
+        <div class="preview-wrap">
+          <iframe src="https://dialgforgsu.github.io/alertconverter/"
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+          <div class="preview-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">Monitor Alert Converter</div>
+          <div class="card-desc">Converts and transforms monitoring alert configurations between formats.</div>
+          <div class="card-actions">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
+              </svg>
+              Live Site
+            </a>
+            <a class="link-repo" href="https://github.com/dialgforgsu/alertconverter" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              dialgforgsu/alertconverter
+            </a>
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
-
-  <!-- ── feedback / comments ── -->
-  <section class="feedback-section">
-    <div class="feedback-header">
-      <h2>Feedback</h2>
-      <p>
-        Leave a comment — no account needed, just a name.<br>
-        <strong>Please be specific:</strong> mention which tool you're referring to, describe the exact
-        behaviour you're seeing or the change you'd like, and include steps to reproduce any bugs.
-      </p>
-    </div>
-
-    <form class="comment-form" id="comment-form" novalidate>
-      <div class="form-row">
-        <div class="form-field" style="max-width: 240px">
-          <label for="cf-name">NAME</label>
-          <input id="cf-name" type="text" placeholder="Your name" maxlength="80" autocomplete="name" required />
-        </div>
-      </div>
-      <div class="form-field">
-        <label for="cf-body">COMMENT</label>
-        <textarea id="cf-body" placeholder="Describe the change you'd like to see or the bug you found…" maxlength="2000" required></textarea>
-      </div>
-      <div class="form-footer">
-        <span class="char-count" id="char-count">0 / 2000</span>
-        <button class="btn-submit" type="submit">Submit</button>
-      </div>
-      <p class="form-status" id="form-status" hidden></p>
-    </form>
-
-    <div class="comment-list" id="comment-list">
-      <p class="comments-loading">Loading comments…</p>
-    </div>
-  </section>
 
   <footer>
     <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">
       <img class="avatar"
            src="https://github.com/dialgforgsu.png"
-           alt="dialgforgsu GitHub avatar"
-           width="40" height="40" />
+           alt="dialgforgsu"
+           width="26" height="26" />
       github.com/dialgforgsu
     </a>
   </footer>
 
   <script>
-    /* ── config ── */
-    const SB_URL = 'https://zezigpysakremuredzwj.supabase.co';
-    const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplemlncHlzYWtyZW11cmVkendqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NjkxMzAsImV4cCI6MjA5MzE0NTEzMH0.iH6DMmKH5e28TpnIezvyqn06m7LPyJGmB3bZLHi6Z0s';
-
-    const sbHeaders = {
-      'apikey': SB_KEY,
-      'Authorization': `Bearer ${SB_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
-    /* ── theme ── */
     function toggleTheme() {
       const isLight = document.documentElement.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
@@ -523,7 +409,6 @@
       document.documentElement.classList.add('light');
     }
 
-    /* ── scale iframe previews ── */
     function scaleAll() {
       document.querySelectorAll('.preview-wrap').forEach(wrap => {
         const iframe = wrap.querySelector('iframe');
@@ -532,229 +417,6 @@
     }
     window.addEventListener('DOMContentLoaded', scaleAll);
     window.addEventListener('resize', scaleAll);
-
-    /* ── helpers ── */
-    function escHtml(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-    function formatDate(iso) {
-      return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    }
-    function getToken(id)        { return localStorage.getItem(`ct_${id}`); }
-    function saveToken(id, tok)  { localStorage.setItem(`ct_${id}`, tok); }
-    function dropToken(id)       { localStorage.removeItem(`ct_${id}`); }
-
-    /* ── in-memory comments cache (keeps body text for edit) ── */
-    let cachedComments = [];
-
-    /* ── render ── */
-    function renderComments(comments) {
-      cachedComments = comments;
-      const list = document.getElementById('comment-list');
-      if (!comments.length) {
-        list.innerHTML = '<p class="comments-empty">No comments yet — be the first.</p>';
-        return;
-      }
-      list.innerHTML = comments.map(c => {
-        const mine = !!getToken(c.id);
-        return `
-        <div class="comment" id="comment-${c.id}">
-          <div class="comment-meta">
-            <span class="comment-name">${escHtml(c.name)}</span>
-            <span class="comment-date">${formatDate(c.created_at)}</span>
-            ${mine ? `
-            <span class="comment-owner-actions">
-              <button class="btn-ghost" data-action="edit"   data-id="${c.id}">Edit</button>
-              <button class="btn-ghost danger" data-action="delete" data-id="${c.id}">Delete</button>
-            </span>` : ''}
-          </div>
-          <div class="comment-body">${escHtml(c.body)}</div>
-        </div>`;
-      }).join('');
-    }
-
-    /* ── event delegation for edit / delete ── */
-    document.getElementById('comment-list').addEventListener('click', async e => {
-      const btn = e.target.closest('button[data-action]');
-      if (!btn) return;
-      const id     = parseInt(btn.dataset.id, 10);
-      const action = btn.dataset.action;
-      const el     = document.getElementById(`comment-${id}`);
-
-      if (action === 'edit')           startEdit(id, el);
-      if (action === 'edit-cancel')    cancelEdit(id, el);
-      if (action === 'edit-save')      await saveEdit(id, el);
-      if (action === 'delete')         showDeleteConfirm(id, el);
-      if (action === 'delete-cancel')  cancelDelete(id, el);
-      if (action === 'delete-confirm') await confirmDelete(id, el);
-    });
-
-    function startEdit(id, el) {
-      const comment = cachedComments.find(c => c.id === id);
-      const bodyEl  = el.querySelector('.comment-body');
-      const ta      = document.createElement('textarea');
-      ta.className  = 'comment-edit-area';
-      ta.value      = comment.body;
-      ta.dataset.editArea = id;
-      bodyEl.replaceWith(ta);
-      ta.focus();
-
-      const actionsEl = el.querySelector('.comment-owner-actions');
-      actionsEl.innerHTML = `
-        <button class="btn-ghost" data-action="edit-cancel" data-id="${id}">Cancel</button>
-        <button class="btn-ghost" data-action="edit-save"   data-id="${id}">Save</button>`;
-    }
-
-    function cancelEdit(id, el) {
-      const comment = cachedComments.find(c => c.id === id);
-      const ta      = el.querySelector('textarea[data-edit-area]');
-      const bodyEl  = document.createElement('div');
-      bodyEl.className = 'comment-body';
-      bodyEl.textContent = comment.body;
-      ta.replaceWith(bodyEl);
-
-      const actionsEl = el.querySelector('.comment-owner-actions');
-      actionsEl.innerHTML = `
-        <button class="btn-ghost" data-action="edit"   data-id="${id}">Edit</button>
-        <button class="btn-ghost danger" data-action="delete" data-id="${id}">Delete</button>`;
-    }
-
-    async function saveEdit(id, el) {
-      const ta      = el.querySelector('textarea[data-edit-area]');
-      const newBody = ta.value.trim();
-      if (!newBody) return;
-      const saveBtn = el.querySelector('[data-action="edit-save"]');
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Saving…';
-
-      try {
-        const res = await fetch(`${SB_URL}/rest/v1/comments?id=eq.${id}`, {
-          method: 'PATCH',
-          headers: { ...sbHeaders, 'x-comment-token': getToken(id) },
-          body: JSON.stringify({ body: newBody }),
-        });
-        if (!res.ok) throw new Error();
-        // update cache and re-render just this comment's body
-        const c = cachedComments.find(c => c.id === id);
-        c.body = newBody;
-        cancelEdit(id, el); // revert to view mode with updated text
-      } catch {
-        saveBtn.disabled = false;
-        saveBtn.textContent = 'Save';
-        alert('Could not save — please try again.');
-      }
-    }
-
-    function showDeleteConfirm(id, el) {
-      if (el.querySelector('.delete-confirm-row')) return;
-      const row = document.createElement('div');
-      row.className = 'delete-confirm-row';
-      row.innerHTML = `
-        <span>Delete this comment?</span>
-        <button class="btn-ghost danger" data-action="delete-confirm" data-id="${id}">Yes, delete</button>
-        <button class="btn-ghost"        data-action="delete-cancel"  data-id="${id}">No</button>`;
-      el.appendChild(row);
-    }
-
-    function cancelDelete(id, el) {
-      el.querySelector('.delete-confirm-row')?.remove();
-    }
-
-    async function confirmDelete(id, el) {
-      const confirmBtn = el.querySelector('[data-action="delete-confirm"]');
-      confirmBtn.disabled = true;
-      confirmBtn.textContent = 'Deleting…';
-
-      try {
-        const res = await fetch(`${SB_URL}/rest/v1/comments?id=eq.${id}`, {
-          method: 'DELETE',
-          headers: { ...sbHeaders, 'x-comment-token': getToken(id) },
-        });
-        if (!res.ok) throw new Error();
-        dropToken(id);
-        cachedComments = cachedComments.filter(c => c.id !== id);
-        renderComments(cachedComments);
-      } catch {
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = 'Yes, delete';
-        alert('Could not delete — please try again.');
-      }
-    }
-
-    /* ── fetch all comments ── */
-    async function loadComments() {
-      try {
-        const res = await fetch(
-          `${SB_URL}/rest/v1/comments?select=id,name,body,created_at&order=created_at.asc`,
-          { headers: sbHeaders }
-        );
-        if (!res.ok) throw new Error();
-        renderComments(await res.json());
-      } catch {
-        document.getElementById('comment-list').innerHTML =
-          '<p class="comments-empty">Could not load comments.</p>';
-      }
-    }
-
-    /* ── post new comment ── */
-    async function postComment(name, body) {
-      const token = crypto.randomUUID();
-      const res = await fetch(`${SB_URL}/rest/v1/comments?select=id`, {
-        method: 'POST',
-        headers: { ...sbHeaders, 'Prefer': 'return=representation' },
-        body: JSON.stringify({ name: name.trim(), body: body.trim(), token }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const [row] = await res.json();
-      saveToken(row.id, token);
-    }
-
-    /* ── form wiring ── */
-    const form      = document.getElementById('comment-form');
-    const nameInput = document.getElementById('cf-name');
-    const bodyInput = document.getElementById('cf-body');
-    const charCount = document.getElementById('char-count');
-    const status    = document.getElementById('form-status');
-    const submitBtn = form.querySelector('.btn-submit');
-
-    bodyInput.addEventListener('input', () => {
-      const n = bodyInput.value.length;
-      charCount.textContent = `${n} / 2000`;
-      charCount.classList.toggle('warn', n > 1800);
-    });
-
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const name = nameInput.value.trim();
-      const body = bodyInput.value.trim();
-      if (!name || !body) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Submitting…';
-      status.hidden = true;
-
-      try {
-        await postComment(name, body);
-        nameInput.value = '';
-        bodyInput.value = '';
-        charCount.textContent = '0 / 2000';
-        showStatus('Comment posted — thanks!', 'success');
-        await loadComments();
-      } catch {
-        showStatus('Something went wrong. Please try again.', 'error');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit';
-      }
-    });
-
-    function showStatus(msg, type) {
-      status.textContent = msg;
-      status.className = `form-status ${type}`;
-      status.hidden = false;
-    }
-
-    loadComments();
   </script>
 
 </body>
