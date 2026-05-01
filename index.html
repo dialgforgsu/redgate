@@ -4,65 +4,71 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Redgate Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     /* ── tokens ── */
     :root {
-      --bg:       #07090e;
-      --surface:  rgba(14, 18, 28, 0.75);
-      --border:   rgba(255, 255, 255, 0.07);
-      --accent:   #f85149;
-      --muted:    #6e7681;
-      --text:     #e6edf3;
-      --btn-fg:   #fff;
-      --glow:     rgba(248, 81, 73, 0.18);
+      --bg:           #07090e;
+      --surface:      rgba(13, 17, 27, 0.82);
+      --surface-card: rgba(16, 20, 32, 0.78);
+      --border:       rgba(255, 255, 255, 0.08);
+      --accent:       #f85149;
+      --muted:        #6e7681;
+      --text:         #e6edf3;
+      --btn-fg:       #fff;
+      --glow:         rgba(248, 81, 73, 0.18);
+      --radius:       16px;
     }
     html.light {
-      --bg:       #f0f2f5;
-      --surface:  rgba(255, 255, 255, 0.8);
-      --border:   rgba(0, 0, 0, 0.08);
-      --accent:   #cf222e;
-      --muted:    #6e7681;
-      --text:     #1f2328;
-      --btn-fg:   #fff;
-      --glow:     rgba(207, 34, 46, 0.12);
+      --bg:           #eef0f4;
+      --surface:      rgba(255, 255, 255, 0.88);
+      --surface-card: rgba(255, 255, 255, 0.82);
+      --border:       rgba(0, 0, 0, 0.09);
+      --accent:       #cf222e;
+      --muted:        #57606a;
+      --text:         #1f2328;
+      --btn-fg:       #fff;
+      --glow:         rgba(207, 34, 46, 0.12);
     }
 
-    /* ── page shell — CSS grid, full viewport ── */
+    /* ── page shell ── */
     html, body { height: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background-color: var(--bg);
       color: var(--text);
       display: grid;
       grid-template-rows: auto 1fr auto;
       height: 100dvh;
       overflow: hidden;
-      padding: 1.6rem 2rem 1.2rem;
-      gap: 1.2rem;
+      padding: 1.5rem 2rem 0.9rem;
+      gap: 0.9rem;
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* dark background: dot grid + red radial glow */
+    /* background: dual radial glows + dot grid */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(248,81,73,0.09) 0%, transparent 70%),
-        radial-gradient(circle, rgba(255,255,255,0.028) 1px, transparent 0);
-      background-size: 100%, 28px 28px;
+        radial-gradient(ellipse 65% 45% at 50% -5%,  rgba(248,81,73,0.11) 0%, transparent 65%),
+        radial-gradient(ellipse 30% 25% at 88% 90%,  rgba(248,81,73,0.05) 0%, transparent 55%),
+        radial-gradient(circle, rgba(255,255,255,0.022) 1px, transparent 0);
+      background-size: 100%, 100%, 26px 26px;
       pointer-events: none;
       z-index: 0;
     }
     html.light body::before {
       background:
-        radial-gradient(ellipse 80% 40% at 50% -5%, rgba(207,34,46,0.06) 0%, transparent 65%);
+        radial-gradient(ellipse 65% 40% at 50% -5%, rgba(207,34,46,0.07) 0%, transparent 60%);
       background-size: 100%;
     }
 
-    /* everything sits above the bg layer */
     header, .card-grid-wrap, footer { position: relative; z-index: 1; }
 
     /* ── theme toggle ── */
@@ -78,104 +84,110 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      backdrop-filter: blur(12px);
-      transition: border-color 0.2s;
+      backdrop-filter: blur(14px);
+      transition: border-color 0.2s, box-shadow 0.2s;
       z-index: 100;
     }
-    .theme-toggle:hover { border-color: var(--accent); }
+    .theme-toggle:hover { border-color: var(--accent); box-shadow: 0 0 10px var(--glow); }
     .icon-moon { display: block; }
     .icon-sun  { display: none; }
     html.light .icon-moon { display: none; }
     html.light .icon-sun  { display: block; }
 
     /* ── header ── */
-    header {
-      text-align: center;
-    }
+    header { text-align: center; }
     header h1 {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-size: clamp(1.7rem, 2.8vw, 2.4rem);
       font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(100deg, var(--text) 30%, var(--accent) 100%);
+      letter-spacing: -0.6px;
+      background: linear-gradient(110deg, var(--text) 20%, var(--accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    header .subtitle {
-      margin-top: 0.25rem;
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-style: italic;
+    .header-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      margin-top: 0.28rem;
     }
-    header .subtitle-2 {
+    .header-meta span {
       color: var(--muted);
-      font-size: 0.68rem;
+      font-size: 0.76rem;
       font-style: italic;
-      opacity: 0.75;
+      font-weight: 400;
+    }
+    .header-meta-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--muted);
+      opacity: 0.4;
+      flex-shrink: 0;
     }
 
-    /* ── card grid wrapper — fills the 1fr row ── */
+    /* ── card grid wrapper ── */
     .card-grid-wrap {
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 0;
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-auto-rows: clamp(380px, 50vh, 560px);
       align-items: stretch;
-      gap: 1rem;
+      gap: 1.1rem;
       width: 75vw;
     }
 
     /* ── card ── */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     .card {
       position: relative;
-      background: var(--surface);
+      background: var(--surface-card);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       height: 100%;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-      animation: fadeUp 0.45s ease both;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      animation: fadeUp 0.5s ease both;
     }
     .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.13s; }
-    .card:nth-child(3) { animation-delay: 0.21s; }
+    .card:nth-child(2) { animation-delay: 0.14s; }
+    .card:nth-child(3) { animation-delay: 0.23s; }
 
-    /* top shimmer line — reveals on hover */
+    /* status accent line — always-on, glows on hover */
     .card::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(to right, transparent 10%, var(--accent) 50%, transparent 90%);
-      opacity: 0;
-      transition: opacity 0.3s;
+      top: 0; left: 12px; right: 12px;
+      height: 2px;
+      border-radius: 0 0 2px 2px;
+      opacity: 0.55;
+      transition: opacity 0.3s, left 0.3s, right 0.3s;
       z-index: 2;
     }
+    .card:hover::before { opacity: 1; left: 0; right: 0; }
 
-    .card:hover {
-      border-color: rgba(248, 81, 73, 0.4);
-      box-shadow:
-        0 0 0 1px rgba(248,81,73,0.2),
-        0 4px 24px var(--glow),
-        0 16px 48px rgba(0,0,0,0.3);
-      transform: translateY(-3px);
-    }
-    .card:hover::before { opacity: 1; }
+    .card-status-green::before  { background: linear-gradient(to right, transparent, #3fb950 30%, #3fb950 70%, transparent); }
+    .card-status-yellow::before { background: linear-gradient(to right, transparent, #d29922 30%, #d29922 70%, transparent); }
+    .card-status-red::before    { background: linear-gradient(to right, transparent, #f85149 30%, #f85149 70%, transparent); }
+
+    .card:hover { transform: translateY(-4px); }
+    .card-status-green:hover  { border-color: rgba(63,185,80,0.35);  box-shadow: 0 0 0 1px rgba(63,185,80,0.12),  0 8px 30px rgba(63,185,80,0.08),  0 20px 60px rgba(0,0,0,0.28); }
+    .card-status-yellow:hover { border-color: rgba(210,153,34,0.35); box-shadow: 0 0 0 1px rgba(210,153,34,0.12), 0 8px 30px rgba(210,153,34,0.08), 0 20px 60px rgba(0,0,0,0.28); }
+    .card-status-red:hover    { border-color: rgba(248,81,73,0.35);  box-shadow: 0 0 0 1px rgba(248,81,73,0.12),  0 8px 30px rgba(248,81,73,0.08),  0 20px 60px rgba(0,0,0,0.28); }
 
     /* ── preview ── */
     .preview-wrap {
@@ -183,9 +195,9 @@
       min-height: 0;
       overflow: hidden;
       position: relative;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.28);
     }
-    html.light .preview-wrap { background: rgba(0,0,0,0.06); }
+    html.light .preview-wrap { background: rgba(0,0,0,0.04); }
 
     .preview-wrap iframe {
       width: 1280px;
@@ -198,7 +210,7 @@
     .preview-fade {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to bottom, transparent 62%, var(--surface) 100%);
+      background: linear-gradient(to bottom, transparent 58%, var(--surface-card) 100%);
       pointer-events: none;
     }
     .preview-link {
@@ -210,24 +222,23 @@
 
     /* ── card body ── */
     .card-body {
-      padding: 0.75rem 1.1rem 0.85rem;
+      padding: 0.8rem 1.2rem 0.9rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.45rem;
     }
 
     .card-desc {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--muted);
-      line-height: 1.5;
-      height: calc(0.76rem * 1.5 * 4);
+      line-height: 1.55;
+      height: calc(0.75rem * 1.55 * 4);
       overflow: hidden;
     }
     .card-actions {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      flex-wrap: wrap;
     }
 
     /* ── live site button ── */
@@ -238,16 +249,18 @@
       background: var(--accent);
       color: var(--btn-fg);
       font-weight: 600;
-      font-size: 0.78rem;
-      padding: 0.4rem 0.85rem;
-      border-radius: 6px;
+      font-size: 0.76rem;
+      padding: 0.42rem 0.92rem;
+      border-radius: 7px;
       text-decoration: none;
-      transition: opacity 0.15s, box-shadow 0.15s;
+      transition: opacity 0.15s, box-shadow 0.15s, transform 0.15s;
       white-space: nowrap;
+      letter-spacing: 0.01em;
     }
     .btn-pages:hover {
-      opacity: 0.88;
-      box-shadow: 0 0 12px var(--glow);
+      opacity: 0.9;
+      box-shadow: 0 0 16px var(--glow);
+      transform: translateY(-1px);
     }
     .btn-pages svg { flex-shrink: 0; }
 
@@ -256,7 +269,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.15s;
@@ -266,7 +279,7 @@
     }
     .link-repo:hover { color: var(--text); }
 
-    /* ── title row (name + badge side by side) ── */
+    /* ── title row ── */
     .card-title-row {
       display: flex;
       align-items: center;
@@ -275,7 +288,7 @@
       min-width: 0;
     }
     .card-title {
-      font-size: 0.92rem;
+      font-size: 0.93rem;
       font-weight: 700;
       letter-spacing: 0.01em;
       white-space: nowrap;
@@ -289,9 +302,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.28rem;
-      padding: 0.18rem 0.55rem;
+      padding: 0.17rem 0.55rem;
       border-radius: 20px;
-      font-size: 0.62rem;
+      font-size: 0.61rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -299,8 +312,7 @@
       flex-shrink: 0;
     }
     .badge-dot {
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: currentColor;
       flex-shrink: 0;
@@ -314,9 +326,9 @@
 
     /* ── last updated ── */
     .card-updated {
-      font-size: 0.67rem;
+      font-size: 0.66rem;
       color: var(--muted);
-      padding-top: 0.45rem;
+      padding-top: 0.42rem;
       border-top: 1px solid var(--border);
       letter-spacing: 0.01em;
     }
@@ -326,12 +338,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.3rem;
-    }
-    .visit-count {
-      font-size: 0.72rem;
-      color: var(--muted);
-      letter-spacing: 0.03em;
+      gap: 0.38rem;
+      border-top: 1px solid var(--border);
+      padding-top: 0.7rem;
+      position: relative;
+      z-index: 1;
     }
     footer a {
       display: inline-flex;
@@ -340,18 +351,40 @@
       color: var(--muted);
       text-decoration: none;
       font-size: 0.78rem;
+      font-weight: 500;
       transition: color 0.2s;
     }
     footer a:hover { color: var(--text); }
     .avatar {
-      width: 26px;
-      height: 26px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       border: 1.5px solid var(--border);
       transition: border-color 0.2s;
       display: block;
     }
     footer a:hover .avatar { border-color: var(--accent); }
+
+    .visit-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      font-size: 0.69rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+      backdrop-filter: blur(10px);
+      letter-spacing: 0.02em;
+      font-weight: 500;
+    }
+    .visit-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #3fb950;
+      flex-shrink: 0;
+      box-shadow: 0 0 4px rgba(63,185,80,0.6);
+    }
   </style>
 </head>
 <body>
@@ -367,15 +400,18 @@
 
   <header>
     <h1>Redgate Tools</h1>
-    <p class="subtitle">Built by G-Su Paek</p>
-    <p class="subtitle-2">Using Claude Code</p>
+    <div class="header-meta">
+      <span>Built by G-Su Paek</span>
+      <div class="header-meta-dot"></div>
+      <span>Using Claude Code</span>
+    </div>
   </header>
 
   <div class="card-grid-wrap">
     <div class="grid">
 
       <!-- 1. Redgate Release Checker — Good To Go -->
-      <div class="card">
+      <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/re-check/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
@@ -390,15 +426,11 @@
           <div class="card-desc">Internal Notes release aggregator applied over our Product Roadmap to show what Redgate is currently focused on.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-              </svg>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
             <a class="link-repo" href="https://github.com/dialgforgsu/re-check" target="_blank" rel="noopener">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/re-check
             </a>
           </div>
@@ -407,7 +439,7 @@
       </div>
 
       <!-- 2. Redgate Visual History — Almost There -->
-      <div class="card">
+      <div class="card card-status-yellow">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/rg-history/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
@@ -422,15 +454,11 @@
           <div class="card-desc">Visually show the history of Redgate products and why we are where we are today.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-              </svg>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
             <a class="link-repo" href="https://github.com/dialgforgsu/rg-history" target="_blank" rel="noopener">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/rg-history
             </a>
           </div>
@@ -438,8 +466,8 @@
         </div>
       </div>
 
-      <!-- 3. Monitor Alert Converter — Not Ready -->
-      <div class="card">
+      <!-- 3. Redgate Monitor Alert Converter — Not Ready -->
+      <div class="card card-status-red">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
@@ -454,15 +482,11 @@
           <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.</div>
           <div class="card-actions">
             <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
-              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/>
-              </svg>
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
             <a class="link-repo" href="https://github.com/dialgforgsu/alertconverter" target="_blank" rel="noopener">
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/alertconverter
             </a>
           </div>
@@ -475,16 +499,19 @@
 
   <footer>
     <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">
-      <img class="avatar"
-           src="https://github.com/dialgforgsu.png"
-           alt="dialgforgsu"
-           width="26" height="26" />
+      <img class="avatar" src="https://github.com/dialgforgsu.png" alt="dialgforgsu" width="28" height="28" />
       github.com/dialgforgsu
     </a>
-    <span class="visit-count" id="visit-count"></span>
+    <span class="visit-count" id="visit-count">
+      <span class="visit-dot"></span>
+      <span id="visit-text">loading visitors…</span>
+    </span>
   </footer>
 
   <script>
+    const SUPABASE_URL  = 'https://zezigpysakremuredzwj.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplemlncHlzYWtyZW11cmVkendqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NjkxMzAsImV4cCI6MjA5MzE0NTEzMH0.iH6DMmKH5e28TpnIezvyqn06m7LPyJGmB3bZLHi6Z0s';
+
     function toggleTheme() {
       const isLight = document.documentElement.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
@@ -523,14 +550,22 @@
     }
 
     async function loadVisitCount() {
-      const el = document.getElementById('visit-count');
+      const el = document.getElementById('visit-text');
       try {
-        const res = await fetch('https://api.countapi.xyz/hit/dialgforgsu/redgate-tools-dashboard');
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/increment_page_views`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON,
+            'Authorization': `Bearer ${SUPABASE_ANON}`,
+            'Content-Type': 'application/json'
+          },
+          body: '{}'
+        });
         if (!res.ok) throw new Error();
-        const { value } = await res.json();
-        el.textContent = `${value.toLocaleString()} visitor${value === 1 ? '' : 's'}`;
+        const count = await res.json();
+        el.textContent = `${Number(count).toLocaleString()} visitor${count === 1 ? '' : 's'}`;
       } catch {
-        /* silently omit if unavailable */
+        el.textContent = '— visitors';
       }
     }
   </script>
