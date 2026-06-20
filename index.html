@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src https://github.com; connect-src https://api.github.com https://zezigpysakremuredzwj.supabase.co; frame-src https://dialgforgsu.github.io; object-src 'none'; base-uri 'self';" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Redgate Tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -389,7 +390,7 @@
 </head>
 <body>
 
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle colour theme">
+  <button class="theme-toggle" id="theme-toggle" aria-label="Toggle colour theme">
     <svg class="icon-moon" width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
       <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
     </svg>
@@ -414,9 +415,10 @@
       <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/re-check/"
-                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
           <div class="preview-fade"></div>
-          <a class="preview-link" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener" aria-label="Open live site"></a>
+          <a class="preview-link" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener noreferrer" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
@@ -425,11 +427,11 @@
           </div>
           <div class="card-desc">Internal Notes release aggregator applied over our Product Roadmap to show what Redgate is currently focused on.</div>
           <div class="card-actions">
-            <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/re-check/" target="_blank" rel="noopener noreferrer">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
-            <a class="link-repo" href="https://github.com/dialgforgsu/re-check" target="_blank" rel="noopener">
+            <a class="link-repo" href="https://github.com/dialgforgsu/re-check" target="_blank" rel="noopener noreferrer">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/re-check
             </a>
@@ -438,26 +440,27 @@
         </div>
       </div>
 
-      <!-- 2. Redgate Visual History — Almost There -->
-      <div class="card card-status-yellow">
+      <!-- 2. Redgate Visual History — Good To Go -->
+      <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/rg-history/"
-                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
           <div class="preview-fade"></div>
-          <a class="preview-link" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener" aria-label="Open live site"></a>
+          <a class="preview-link" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener noreferrer" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
             <div class="card-title">Redgate Visual History</div>
-            <span class="badge badge-yellow"><span class="badge-dot"></span>Almost There</span>
+            <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
           </div>
           <div class="card-desc">Visually show the history of Redgate products and why we are where we are today.</div>
           <div class="card-actions">
-            <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/rg-history/" target="_blank" rel="noopener noreferrer">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
-            <a class="link-repo" href="https://github.com/dialgforgsu/rg-history" target="_blank" rel="noopener">
+            <a class="link-repo" href="https://github.com/dialgforgsu/rg-history" target="_blank" rel="noopener noreferrer">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/rg-history
             </a>
@@ -466,26 +469,27 @@
         </div>
       </div>
 
-      <!-- 3. Redgate Monitor Alert Converter — Not Ready -->
-      <div class="card card-status-red">
+      <!-- 3. Redgate Monitor Alert Converter — Good To Go -->
+      <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
-                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"></iframe>
+                  tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"
+                  sandbox="allow-scripts allow-same-origin"></iframe>
           <div class="preview-fade"></div>
-          <a class="preview-link" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener" aria-label="Open live site"></a>
+          <a class="preview-link" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener noreferrer" aria-label="Open live site"></a>
         </div>
         <div class="card-body">
           <div class="card-title-row">
             <div class="card-title">Redgate Monitor Alert Converter</div>
-            <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
+            <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
           </div>
           <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.</div>
           <div class="card-actions">
-            <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener">
+            <a class="btn-pages" href="https://dialgforgsu.github.io/alertconverter/" target="_blank" rel="noopener noreferrer">
               <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm-.35 1.03C6.48 2.3 5.6 4 5.08 6H2.25A6.97 6.97 0 0 1 7.65 1.03zM1.5 8A6.5 6.5 0 0 1 1.7 7h3.2c-.06.65-.1 1.32-.1 2s.04 1.35.1 2H1.7A6.5 6.5 0 0 1 1.5 8zm.75 3h2.83c.52 2 1.4 3.7 2.57 4.97A6.97 6.97 0 0 1 2.25 11zm3.88 0h3.74c-.48 1.72-1.24 3.08-1.87 3.83-.63-.75-1.39-2.11-1.87-3.83zm0-5h3.74C9.39 6.77 8.63 8.13 8 8.88c-.63-.75-1.39-2.11-1.87-3.83V5zm4.8 0c-.52-2-1.4-3.7-2.57-4.97A6.97 6.97 0 0 1 13.75 6h-2.82zm.95 2c.06.65.1 1.32.1 2s-.04 1.35-.1 2H8.1c.06-.65.1-1.32.1-2s-.04-1.35-.1-2h3.78zm.84 5h-2.83c-.52 2-1.4 3.7-2.57 4.97A6.97 6.97 0 0 0 13.75 11z"/></svg>
               Live Site
             </a>
-            <a class="link-repo" href="https://github.com/dialgforgsu/alertconverter" target="_blank" rel="noopener">
+            <a class="link-repo" href="https://github.com/dialgforgsu/alertconverter" target="_blank" rel="noopener noreferrer">
               <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.34c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.88-1.17-.88-1.17-.72-.49.05-.48.05-.48.8.06 1.22.82 1.22.82.71 1.22 1.86.87 2.31.66.07-.52.28-.87.51-1.07-1.77-.2-3.63-.89-3.63-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.67 7.67 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.19c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
               dialgforgsu/alertconverter
             </a>
@@ -498,7 +502,7 @@
   </div>
 
   <footer>
-    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener">
+    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener noreferrer">
       <img class="avatar" src="https://github.com/dialgforgsu.png" alt="dialgforgsu" width="28" height="28" />
       github.com/dialgforgsu
     </a>
@@ -516,6 +520,7 @@
       const isLight = document.documentElement.classList.toggle('light');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
     }
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
     if (localStorage.getItem('theme') === 'light') {
       document.documentElement.classList.add('light');
     }
