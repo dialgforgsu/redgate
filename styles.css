@@ -378,7 +378,7 @@ footer a:hover .avatar { border-color: var(--accent); }
   box-shadow: 0 0 4px rgba(63,185,80,0.6);
 }
 
-/* ── support links (coffee + substack) ── */
+/* ── support links (coffee) ── */
 .support-links {
   display: flex;
   align-items: center;
@@ -410,13 +410,7 @@ footer a:hover .avatar { border-color: var(--accent); }
   border-color: rgba(255,221,0,0.45);
   box-shadow: 0 0 12px rgba(255,221,0,0.18);
 }
-.support-substack:hover {
-  color: #ff6719;
-  border-color: rgba(255,103,25,0.45);
-  box-shadow: 0 0 12px rgba(255,103,25,0.18);
-}
 html.light .support-coffee:hover   { color: #b38f00; }
-html.light .support-substack:hover { color: #d4530f; }
 
 /* ── card desc progress info ── */
 .card-desc-progress {
@@ -560,7 +554,7 @@ html.light .support-substack:hover { color: #d4530f; }
 }
 .chat-action-btn:hover { background: rgba(207,34,46,0.07); border-color: #cf222e; }
 
-/* support action cards (coffee + substack) */
+/* support action cards (coffee) */
 .chat-support {
   display: flex;
   flex-direction: column;
@@ -595,8 +589,6 @@ html.light .support-substack:hover { color: #d4530f; }
 
 .chat-support-coffee .chat-support-icon    { background: rgba(255,221,0,0.18); color: #a07c00; }
 .chat-support-coffee:hover    { border-color: rgba(255,200,0,0.7); box-shadow: 0 2px 12px rgba(255,200,0,0.22); }
-.chat-support-substack .chat-support-icon  { background: rgba(255,103,25,0.12); color: #ff6719; }
-.chat-support-substack:hover  { border-color: rgba(255,103,25,0.55); box-shadow: 0 2px 12px rgba(255,103,25,0.18); }
 
 /* back-to-menu pill */
 .chat-back { align-self: flex-start; }

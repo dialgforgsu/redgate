@@ -99,13 +99,6 @@ const SUPPORT_ITEMS = [
     cls: 'chat-support-coffee',
     icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h9a1 1 0 0 1 1 1v1h1.5a2.5 2.5 0 0 1 0 5H12v1a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V2zm10 5h1.5a1.5 1.5 0 0 0 0-3H12v3z"/></svg>'
   },
-  {
-    label: 'Subscribe on Substack',
-    sub: 'Get new posts by email',
-    href: 'https://dialgforgsu.substack.com/subscribe',
-    cls: 'chat-support-substack',
-    icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>'
-  },
 ];
 
 let chatState = 'idle';
