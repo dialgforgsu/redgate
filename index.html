@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://github.com https://avatars.githubusercontent.com; frame-src https://dialgforgsu.github.io; connect-src https://api.github.com https://zezigpysakremuredzwj.supabase.co; base-uri 'self'; form-action 'none';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; frame-src https://dialgforgsu.github.io; connect-src https://api.github.com https://zezigpysakremuredzwj.supabase.co https://formspree.io; base-uri 'self'; form-action 'none';" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Redgate Tools</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
@@ -63,8 +63,8 @@
         </div>
       </div>
 
-      <!-- 2. Redgate Visual History — Almost There -->
-      <div class="card card-status-yellow">
+      <!-- 2. Redgate Visual History — Good To Go -->
+      <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/rg-history/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"
@@ -75,7 +75,7 @@
         <div class="card-body">
           <div class="card-title-row">
             <div class="card-title">Redgate Visual History</div>
-            <span class="badge badge-yellow"><span class="badge-dot"></span>Almost There</span>
+            <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
           </div>
           <div class="card-desc">Visually show the history of Redgate products and why we are where we are today.</div>
           <div class="card-actions">
@@ -92,8 +92,8 @@
         </div>
       </div>
 
-      <!-- 3. Redgate Monitor Alert Converter — Not Ready -->
-      <div class="card card-status-red">
+      <!-- 3. Redgate Monitor Alert Converter — Good To Go -->
+      <div class="card card-status-green">
         <div class="preview-wrap">
           <iframe src="https://dialgforgsu.github.io/alertconverter/"
                   tabindex="-1" aria-hidden="true" scrolling="no" loading="lazy"
@@ -104,7 +104,7 @@
         <div class="card-body">
           <div class="card-title-row">
             <div class="card-title">Redgate Monitor Alert Converter</div>
-            <span class="badge badge-red"><span class="badge-dot"></span>Not Ready</span>
+            <span class="badge badge-green"><span class="badge-dot"></span>Good To Go</span>
           </div>
           <div class="card-desc">Internal tool to make adoption of Redgate Monitor easier for customers transitioning from a different monitoring solution.<br><br><span class="card-desc-progress">DPA: 75% &nbsp;·&nbsp; SQL Sentry: 50% &nbsp;·&nbsp; Idera: 25% &nbsp;·&nbsp; Quest Spotlight: 25%</span></div>
           <div class="card-actions">
@@ -125,8 +125,13 @@
   </div>
 
   <footer>
+<<<<<<< HEAD
     <a class="footer-handle" href="https://github.com/dialgforgsu" target="_blank" rel="noopener noreferrer">
       <img class="avatar" src="avatar.jpg" alt="dialgforgsu" width="28" height="28" style="object-fit:contain;background:#000;border-radius:50%;" />
+=======
+    <a href="https://github.com/dialgforgsu" target="_blank" rel="noopener noreferrer">
+      <img class="avatar" src="avatar.jpg" alt="dialgforgsu" width="28" height="28" />
+>>>>>>> b550ae59ab4cb20d76bbacb30c56e8036196d07a
       github.com/dialgforgsu
     </a>
     <div class="support-links">
@@ -144,6 +149,36 @@
       <span id="visit-text">loading visitors…</span>
     </span>
   </footer>
+
+  <!-- chat widget -->
+  <button id="chat-toggle" class="chat-toggle" aria-label="Open chat" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-1.044 1.46A11.977 11.977 0 0 1 0 8c0-3.98 3.578-7 8-7s8 3.02 8 7-3.578 7-8 7a9.06 9.06 0 0 1-2.088-.243 4.28 4.28 0 0 1-2.942.976c-.527 0-1.048-.055-1.56-.163a3.933 3.933 0 0 0 .486-2.42z"/>
+    </svg>
+  </button>
+
+  <div id="chat-window" class="chat-window" role="dialog" aria-label="Chat assistant">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <span class="chat-header-title">Ask about the tools</span>
+        <span class="chat-header-sub">or send G-Su a message</span>
+      </div>
+      <button id="chat-close" class="chat-close" aria-label="Close chat">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+        </svg>
+      </button>
+    </div>
+    <div id="chat-log" class="chat-log" aria-live="polite"></div>
+    <div class="chat-input-row">
+      <input id="chat-input" class="chat-input" type="text" placeholder="Ask me anything…" autocomplete="off" maxlength="500" />
+      <button id="chat-send" class="chat-send" aria-label="Send message">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11zM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <script src="main.js"></script>
 
