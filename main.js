@@ -91,6 +91,23 @@ const MENU_ITEMS = [
   { label: 'Contact G-Su',    key: 'contact'  },
 ];
 
+const SUPPORT_ITEMS = [
+  {
+    label: 'Buy me a coffee',
+    sub: 'Support these tools',
+    href: 'https://buymeacoffee.com/gsupaek',
+    cls: 'chat-support-coffee',
+    icon: '<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h9a1 1 0 0 1 1 1v1h1.5a2.5 2.5 0 0 1 0 5H12v1a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V2zm10 5h1.5a1.5 1.5 0 0 0 0-3H12v3z"/></svg>'
+  },
+  {
+    label: 'Subscribe on Substack',
+    sub: 'Get new posts by email',
+    href: 'https://dialgforgsu.substack.com/subscribe',
+    cls: 'chat-support-substack',
+    icon: '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>'
+  },
+];
+
 let chatState = 'idle';
 let contactData = {};
 
@@ -159,7 +176,7 @@ function showTyping() {
 function hideTyping() { document.getElementById('chat-typing')?.remove(); }
 
 function clearActions() {
-  document.querySelectorAll('.chat-actions, .chat-back').forEach(el => el.remove());
+  document.querySelectorAll('.chat-actions, .chat-support, .chat-back').forEach(el => el.remove());
 }
 
 function showMainMenu() {
@@ -181,6 +198,35 @@ function showMainMenu() {
   });
 
   log.appendChild(wrap);
+
+  const support = document.createElement('div');
+  support.className = 'chat-support';
+  SUPPORT_ITEMS.forEach(({ label, sub, href, icon, cls }) => {
+    const a = document.createElement('a');
+    a.className = `chat-support-card ${cls}`;
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+
+    const ic = document.createElement('span');
+    ic.className = 'chat-support-icon';
+    ic.innerHTML = icon;
+
+    const txt = document.createElement('span');
+    txt.className = 'chat-support-text';
+    const l = document.createElement('span');
+    l.className = 'chat-support-label';
+    l.textContent = label;
+    const s = document.createElement('span');
+    s.className = 'chat-support-sub';
+    s.textContent = sub;
+    txt.append(l, s);
+
+    a.append(ic, txt);
+    support.appendChild(a);
+  });
+
+  log.appendChild(support);
   log.scrollTop = log.scrollHeight;
 }
 
