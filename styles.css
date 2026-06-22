@@ -378,40 +378,6 @@ footer a:hover .avatar { border-color: var(--accent); }
   box-shadow: 0 0 4px rgba(63,185,80,0.6);
 }
 
-/* ── support links (coffee) ── */
-.support-links {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.support-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.71rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--muted);
-  text-decoration: none;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 0.28rem 0.78rem;
-  backdrop-filter: blur(10px);
-  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-  white-space: nowrap;
-}
-.support-btn svg { flex-shrink: 0; opacity: 0.85; }
-.support-btn:hover { transform: translateY(-1px); }
-.support-coffee:hover {
-  color: #ffdd00;
-  border-color: rgba(255,221,0,0.45);
-  box-shadow: 0 0 12px rgba(255,221,0,0.18);
-}
-html.light .support-coffee:hover   { color: #b38f00; }
-
 /* ── card desc progress info ── */
 .card-desc-progress {
   display: block;
