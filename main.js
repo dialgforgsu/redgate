@@ -76,18 +76,12 @@ const TOOLS = {
     name: 'Redgate Visual History',
     desc: 'An interactive visual timeline of Redgate\'s product portfolio — showing where each product came from, how it evolved, and why the lineup looks the way it does today.',
     link: 'https://dialgforgsu.github.io/rg-history/'
-  },
-  converter: {
-    name: 'Redgate Monitor Alert Converter',
-    desc: 'A migration tool that converts alert configurations from DPA, SQL Sentry, Idera, and Quest Spotlight into Redgate Monitor format — so customers don\'t have to rebuild their monitoring rules from scratch.',
-    link: 'https://dialgforgsu.github.io/alertconverter/'
   }
 };
 
 const MENU_ITEMS = [
   { label: 'Release Checker', key: 'checker'  },
   { label: 'Visual History',  key: 'history'  },
-  { label: 'Alert Converter', key: 'converter' },
   { label: 'Contact G-Su',    key: 'contact'  },
 ];
 
@@ -314,10 +308,6 @@ function processInput(raw) {
   }
   if (/\b(visual\s*hist|rg-?hist|timeline|product\s*hist|history)\b/.test(t)) {
     botReply(`${TOOLS.history.name}\n\n${TOOLS.history.desc}\n\nLink: ${TOOLS.history.link}`, true);
-    return;
-  }
-  if (/\b(alert|convert|monitor|sql\s*sentry|idera|dpa|quest|spotlight|migrat)\b/.test(t)) {
-    botReply(`${TOOLS.converter.name}\n\n${TOOLS.converter.desc}\n\nLink: ${TOOLS.converter.link}`, true);
     return;
   }
   if (/\b(tools?|help|what|list|show|all|purpose|about|hi+|hey|hello)\b/.test(t)) {
